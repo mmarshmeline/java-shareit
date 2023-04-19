@@ -16,4 +16,3 @@ public interface UserRepository {
 
     UserDto readUser(Long userId);
 }
-

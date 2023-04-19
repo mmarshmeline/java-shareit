@@ -43,7 +43,4 @@ public class UserServiceImpl implements UserService {
     public UserDto readUser(Long userId) {
         return userRepository.readUser(userId);
     }
-
-
 }
-

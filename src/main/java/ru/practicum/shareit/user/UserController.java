@@ -45,4 +45,3 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
     }
 }
-
