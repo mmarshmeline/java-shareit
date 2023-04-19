@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
+
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<?> handleIncorrectValidate(DuplicateException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
