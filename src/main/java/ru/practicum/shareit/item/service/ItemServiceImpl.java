@@ -27,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addItem(Long userId, ItemDto itemDto) {
-        try {//проверка на то, что пользователь существует, осуществляется в методе readUser()
+        try {
             userRepository.readUser(userId);
         } catch (NotFoundException e) {
             throw new NotFoundUserForItemException("Такого пользователя в приложении нет!");
