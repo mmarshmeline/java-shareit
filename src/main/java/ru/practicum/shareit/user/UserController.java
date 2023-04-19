@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        /*return new ResponseEntity<>(userService.createUser(user), HttpStatusCode.valueOf(200));*/
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
@@ -33,19 +32,16 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> readUser(@PathVariable Long userId) {
-        /*return new ResponseEntity<>(userService.readUser(userId), HttpStatusCode.valueOf(200));*/
         return new ResponseEntity<>(userService.readUser(userId), HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody User user) {
-        /*return new ResponseEntity<>(userService.editUser(userId, user), HttpStatusCode.valueOf(200));*/
         return new ResponseEntity<>(userService.editUser(userId, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
-        /*return new ResponseEntity<>(userService.deleteUser(userId), HttpStatusCode.valueOf(200));*/
         return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
     }
 }
