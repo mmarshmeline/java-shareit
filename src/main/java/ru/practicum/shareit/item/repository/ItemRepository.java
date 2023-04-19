@@ -10,8 +10,12 @@ import java.util.List;
 @Repository
 public interface ItemRepository {
     ItemDto addItem(User owner, Item item);
+
     ItemDto editItem(Long ownerId, Long itemId, ItemDto itemDto);
+
     ItemDto getItem(Long itemId);
+
     List<ItemDto> readUsersItems(Long ownerId);
+
     List<ItemDto> readFoundItems(String text);
 }

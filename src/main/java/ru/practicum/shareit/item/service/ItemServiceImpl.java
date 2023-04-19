@@ -11,7 +11,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-
 import java.util.List;
 
 @Service
@@ -28,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addItem(Long userId, ItemDto itemDto) {
-        try  {//проверка на то, что пользователь существует, осуществляется в методе readUser()
+        try {//проверка на то, что пользователь существует, осуществляется в методе readUser()
             userRepository.readUser(userId);
         } catch (NotFoundException e) {
             throw new NotFoundUserForItemException("Такого пользователя в приложении нет!");
