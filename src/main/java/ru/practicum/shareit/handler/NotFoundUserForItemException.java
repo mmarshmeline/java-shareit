@@ -5,4 +5,3 @@ public class NotFoundUserForItemException extends RuntimeException {
         super(message);
     }
 }
-

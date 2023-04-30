@@ -3,6 +3,7 @@ package ru.practicum.shareit.request;
 /**
  * TODO Sprint add-item-requests.
  */
+
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
@@ -15,4 +16,3 @@ public class ItemRequest {
     private User requestor;
     private LocalDateTime created;
 }
-

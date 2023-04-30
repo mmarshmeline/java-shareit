@@ -1,11 +1,11 @@
 package ru.practicum.shareit.user.mapper;
 
+import ru.practicum.shareit.handler.NotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class UserMapper {
@@ -15,7 +15,7 @@ public class UserMapper {
     public static UserDto toUserDto(User user) {
 
         if (user == null) {
-            return null; //TODO пробросить исключение
+            throw new NotFoundException("Такого пользователя нет в приложении!");
         }
 
         return UserDto.builder()
@@ -28,7 +28,7 @@ public class UserMapper {
     public static User fromUserDto(UserDto userDto) {
 
         if (userDto == null) {
-            return null; //TODO пробросить исключение
+            throw new NotFoundException("Такого пользователя нет в приложении!");
         }
 
         return User.builder()

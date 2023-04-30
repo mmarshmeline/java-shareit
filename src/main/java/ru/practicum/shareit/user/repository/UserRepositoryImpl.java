@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Slf4j
@@ -20,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
     private Long id = 1L;
 
     private void validateUserEmail(User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank() ) {
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
             log.warn("Что-то пошло не так!");
             throw new ValidationException("E-mail пользователя не может быть пустым!");
         }
@@ -30,9 +31,9 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    private void validateDuplicateEmail (User user) {
+    private void validateDuplicateEmail(User user) {
         for (User element : users.values()) {
-            if (element.getEmail().equals(user.getEmail()) && user.getId() != element.getId()) {
+            if (element.getEmail().equals(user.getEmail()) && !Objects.equals(user.getId(), element.getId())) {
                 log.warn("Что-то пошло не так!");
                 throw new DuplicateException("Пользователь с таким e-mail уже существует!");
             }
