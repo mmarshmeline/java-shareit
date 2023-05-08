@@ -1,41 +1,27 @@
 package ru.practicum.shareit.item;
 
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.dto.ItemDto;
+import org.mapstruct.*;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
-@NoArgsConstructor
-public class ItemMapper {
+@Mapper(componentModel = "spring")
+public interface ItemMapper {
+    ItemDtoResponse mapToItemDtoResponse(Item item);
 
-    public static ItemDto toItemDto(Item item) {
+    Item mapToItemFromItemDto(ItemDto itemDto);
 
-        if (item == null) {
-            return null; //надо пробросить исключение
-        }
+    @Mapping(source = "booker.id", target = "bookerId")
+    BookingShortDto mapToBookingShortDto(Booking booking);
 
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .owner(item.getOwner())
-                .request(item.getRequest())
-                .build();
-    }
+    Comment mapToCommentFromCommentDto(CommentDto commentDto);
 
-    public static Item fromItemDto(ItemDto itemDto) {
+    @Mapping(source = "author.name", target = "authorName")
+    CommentDtoResponse mapToCommentDtoResponseFromComment(Comment comment);
 
-        if (itemDto == null) {
-            return null; //а не пробросить бы исключение?
-        }
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Item mapToItemFromItemDtoUpdate(ItemDtoUpdate itemDtoUpdate, @MappingTarget Item item);
 
-        return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable())
-                .owner(itemDto.getOwner())
-                .request(itemDto.getRequest())
-                .build();
-    }
 }
