@@ -58,5 +58,4 @@ public class UserController {
         log.debug("Удаляем пользователя с id " + userId + "...");
         userService.deleteUser(userId);
     }
-
 }

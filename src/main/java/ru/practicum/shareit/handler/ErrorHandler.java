@@ -27,21 +27,21 @@ public class ErrorHandler {
     private ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
         log.error("Что-то пошло не так! Ошибка " + HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST + e.getFieldError().getDefaultMessage(),
-                                    HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     private ResponseEntity<String> handleException(MethodArgumentTypeMismatchException e) {
         log.error("Что-то пошло не так! Ошибка " + HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST + "Некорректные параметры строки " + e.getName()
-                                    + " = " + e.getValue(), HttpStatus.BAD_REQUEST);
+                + " = " + e.getValue(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     private ResponseEntity<String> handleException() {
         log.error("Что-то пошло не так! Ошибка " + HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR + " Нарушение уникального индекса или " +
-                                    "первичного ключа", HttpStatus.INTERNAL_SERVER_ERROR);
+                "первичного ключа", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(StateException.class)

@@ -16,7 +16,6 @@ public class ItemDtoResponse {
     private String name;
     private String description;
     private Boolean available;
-    //private User owner;
     private ItemRequest request;
     private BookingShortDto lastBooking;
     private BookingShortDto nextBooking;

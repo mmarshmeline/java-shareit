@@ -55,14 +55,6 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookingService.readUsersBookings(userId, state));
     }
 
-   /*@GetMapping
-    public ResponseEntity<BookingListDto> getAllBookingsForUser(@RequestHeader("X-Sharer-User-Id") @Min(1) Long userId,
-                                                                @RequestParam(defaultValue = "ALL") String state) {
-        log.debug("Предоставляем инфо о бронированиях пользователя...");
-        return ResponseEntity.status(HttpStatus.OK).body(bookingService.getAllBookingsForUser(userId, state));
-    }*/
-
-
     @GetMapping("owner")
     public ResponseEntity<BookingListDto> readOwnersBooking(
             @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId, @RequestParam(defaultValue = "ALL") String state) {

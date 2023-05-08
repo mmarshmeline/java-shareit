@@ -7,6 +7,7 @@ public interface ItemService {
     ItemDtoResponse addItem(ItemDto item, Long userId);
 
     ItemDtoResponse updateItem(Long itemId, Long ownerId, ItemDtoUpdate itemDtoUpdate);
+
     ItemDtoResponse getItem(Long userId, Long itemId);
 
     ItemListDto readUsersItems(Long ownerId);

@@ -64,5 +64,4 @@ public class ItemController {
         log.info("Пользователь с id " + userId + " оставил отзыв к товару с id " + itemId + ".");
         return new ResponseEntity<>(itemService.addComment(itemId, userId, commentDto), HttpStatus.OK);
     }
-
 }
