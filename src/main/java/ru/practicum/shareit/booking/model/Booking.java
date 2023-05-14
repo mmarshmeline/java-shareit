@@ -18,7 +18,6 @@ import java.util.Objects;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "bookings")
-
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

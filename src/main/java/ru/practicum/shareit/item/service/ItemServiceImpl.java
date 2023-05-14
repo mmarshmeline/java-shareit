@@ -1,10 +1,14 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.practicum.shareit.booking.BookingMapper;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.item.ItemMapper;
@@ -18,29 +22,22 @@ import ru.practicum.shareit.user.model.User;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemMapper itemMapper;
-
-
-    @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository, BookingRepository bookingRepository, CommentRepository commentRepository, ItemMapper itemMapper) {
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.bookingRepository = bookingRepository;
-        this.commentRepository = commentRepository;
-        this.itemMapper = itemMapper;
-    }
 
     @Override
     @Transactional
@@ -95,7 +92,25 @@ public class ItemServiceImpl implements ItemService {
         if (!userRepository.existsById(ownerId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого пользователя в приложении не существует.");
         }
-        List<ItemDtoResponse> ownersItemsList = itemRepository.findAllByOwnerId(ownerId).stream()
+        List<Item> ownersItemList = itemRepository.findAllByOwnerId(ownerId);
+        List<Booking> bookingList = bookingRepository.findAll();
+        List<ItemDtoResponse> itemDtoList = new ArrayList<>();
+        for (Item element : ownersItemList) {
+            if (!bookingList.isEmpty()) {
+                Booking lastBooking = bookingList.stream().filter(a -> a.getStart().isBefore(LocalDateTime.now())).min((a, b) -> b.getStart().compareTo(a.getStart())).get();
+                Booking nextBooking = bookingList.stream().filter(a -> a.getStart().isAfter(LocalDateTime.now())).min((a, b) -> a.getStart().compareTo(b.getStart())).get();
+                ItemDtoResponse itemDtoResponse = itemMapper.mapToItemDtoResponse(element);
+                itemDtoResponse.setLastBooking(itemMapper.mapToBookingShortDto(lastBooking));
+                itemDtoResponse.setNextBooking(itemMapper.mapToBookingShortDto(nextBooking));
+                itemDtoList.add(itemDtoResponse);
+            } else {
+                ItemDtoResponse itemDtoResponse = itemMapper.mapToItemDtoResponse(element);
+                itemDtoResponse.setLastBooking(itemMapper.mapToBookingShortDto(null));
+                itemDtoResponse.setNextBooking(itemMapper.mapToBookingShortDto(null));
+                itemDtoList.add(itemDtoResponse);
+            }
+        }
+        /*List<ItemDtoResponse> ownersItemsList = itemRepository.findAllByOwnerId(ownerId).stream()
                 .map(itemMapper::mapToItemDtoResponse).collect(Collectors.toList());
         for (ItemDtoResponse item : ownersItemsList) {
             item.setLastBooking(itemMapper.mapToBookingShortDto(bookingRepository.findFirstByItemIdAndStartBeforeOrderByStartDesc(
@@ -104,9 +119,10 @@ public class ItemServiceImpl implements ItemService {
                     .findFirstByItemIdAndStartAfterAndStatusOrderByStartAsc(
                             item.getId(), LocalDateTime.now(), Status.APPROVED)
             ));
-        }
+        }*/
         log.info("Предоставляем инфо о товарах пользователя с id " + ownerId + "...");
-        return ItemListDto.builder().items(ownersItemsList).build();
+        //return ItemListDto.builder().items(ownersItemsList).build();
+        return ItemListDto.builder().items(itemDtoList).build();
     }
 
     @Override

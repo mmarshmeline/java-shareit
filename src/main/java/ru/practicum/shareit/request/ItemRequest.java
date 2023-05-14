@@ -11,9 +11,9 @@ import java.util.Objects;
 /**
  * TODO Sprint add-item-requests.
  */
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "requests")
 public class ItemRequest {
