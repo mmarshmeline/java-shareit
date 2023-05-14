@@ -91,9 +91,10 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookingList = bookingRepository.findAll();
         List<ItemDtoResponse> itemDtoList = new ArrayList<>();
         for (Item element : ownersItemList) {
-            if (!bookingList.isEmpty()) {
-                Booking lastBooking = bookingList.stream().filter(a -> a.getStart().isBefore(LocalDateTime.now())).min((a, b) -> b.getStart().compareTo(a.getStart())).get();
-                Booking nextBooking = bookingList.stream().filter(a -> a.getStart().isAfter(LocalDateTime.now())).min((a, b) -> a.getStart().compareTo(b.getStart())).get();
+            List<Booking> filteredBookingList = bookingList.stream().filter(b -> b.getItem().getId() == element.getId()).collect(Collectors.toList());
+            if (!filteredBookingList.isEmpty()) {
+                Booking lastBooking = filteredBookingList.stream().filter(a -> a.getStart().isBefore(LocalDateTime.now())).min((a, b) -> b.getStart().compareTo(a.getStart())).get();
+                Booking nextBooking = filteredBookingList.stream().filter(a -> a.getStart().isAfter(LocalDateTime.now()) && a.getStatus() == Status.APPROVED).min((a, b) -> a.getStart().compareTo(b.getStart())).orElse(null);
                 ItemDtoResponse itemDtoResponse = itemMapper.mapToItemDtoResponse(element);
                 itemDtoResponse.setLastBooking(itemMapper.mapToBookingShortDto(lastBooking));
                 itemDtoResponse.setNextBooking(itemMapper.mapToBookingShortDto(nextBooking));
