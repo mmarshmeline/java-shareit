@@ -6,15 +6,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserDtoResponse;
+import ru.practicum.shareit.user.dto.UserDtoUpdate;
+import ru.practicum.shareit.user.dto.UserListDto;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
+/**
+ * TODO Sprint add-controllers.
+ */
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-
     private final UserService userService;
 
     @Autowired
@@ -23,32 +29,33 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        log.info("Добавлен новый пользователь.");
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<UserDtoResponse> createUser(@Valid @RequestBody UserDto userDto) {
+        log.debug("Добавляем пользователя " + userDto.getName() + "...");
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userDto));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<UserDtoResponse> readUser(@PathVariable("id") @Min(1) Long userId) {
+        log.debug("Получаем инфо о пользователе с id " + userId + "...");
+        return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(userId));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> readUsers() {
-        log.info("Возвращаем список пользователей.");
-        return new ResponseEntity<>(userService.readUsers(), HttpStatus.OK);
+    public ResponseEntity<UserListDto> readUsers() {
+        log.debug("Получаем инфо обо всех пользователях приложения...");
+        return ResponseEntity.status(HttpStatus.OK).body(userService.readUsers());
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> readUser(@PathVariable Long userId) {
-        log.info("Возвращаем информацию о пользователе с id " + userId + ".");
-        return new ResponseEntity<>(userService.readUser(userId), HttpStatus.OK);
+    @PatchMapping("{id}")
+    public ResponseEntity<UserDtoResponse> editUser(@RequestBody UserDtoUpdate userDtoUpdate,
+                                                    @PathVariable("id") Long userId) {
+        log.debug("Редактируем инфо о пользователе с id " + userId + "...");
+        return ResponseEntity.status(HttpStatus.OK).body(userService.editUser(userDtoUpdate, userId));
     }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody User user) {
-        log.info("Информация о пользователе с id " + userId + " отредактирована.");
-        return new ResponseEntity<>(userService.editUser(userId, user), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
-        log.info("Пользователь с id " + userId + " удален.");
-        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
+    @DeleteMapping("{id}")
+    public void deleteUser(@Min(1) @PathVariable("id") Long userId) {
+        log.debug("Удаляем пользователя с id " + userId + "...");
+        userService.deleteUser(userId);
     }
 }
