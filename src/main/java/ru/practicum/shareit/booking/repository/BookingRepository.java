@@ -1,10 +1,7 @@
 package ru.practicum.shareit.booking.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.booking.Status;
-import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.time.LocalDateTime;
@@ -40,8 +37,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Boolean existsBookingByItemIdAndBookerIdAndStatusAndEndIsBefore(
             Long itemId, Long bookerId, Status status, LocalDateTime end);
-
-    //@Query("SELECT b.item.id, b FROM bookings b WHERE b.item.id IN :itemIds AND b.status = :status AND b.endTime > :now ORDER BY b.startTime ASC")
-    //List<Object[]> findBookingsForItems(@Param("itemIds") List<Long> itemIds, @Param("now") LocalDateTime now, @Param("status") Status status);
-
 }

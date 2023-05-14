@@ -2,12 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.practicum.shareit.booking.BookingMapper;
-import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.Status;
@@ -22,11 +19,9 @@ import ru.practicum.shareit.user.model.User;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,18 +105,7 @@ public class ItemServiceImpl implements ItemService {
                 itemDtoList.add(itemDtoResponse);
             }
         }
-        /*List<ItemDtoResponse> ownersItemsList = itemRepository.findAllByOwnerId(ownerId).stream()
-                .map(itemMapper::mapToItemDtoResponse).collect(Collectors.toList());
-        for (ItemDtoResponse item : ownersItemsList) {
-            item.setLastBooking(itemMapper.mapToBookingShortDto(bookingRepository.findFirstByItemIdAndStartBeforeOrderByStartDesc(
-                    item.getId(), LocalDateTime.now())));
-            item.setNextBooking(itemMapper.mapToBookingShortDto(bookingRepository
-                    .findFirstByItemIdAndStartAfterAndStatusOrderByStartAsc(
-                            item.getId(), LocalDateTime.now(), Status.APPROVED)
-            ));
-        }*/
         log.info("Предоставляем инфо о товарах пользователя с id " + ownerId + "...");
-        //return ItemListDto.builder().items(ownersItemsList).build();
         return ItemListDto.builder().items(itemDtoList).build();
     }
 
